@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/moviesFragment"
-        android:name="com.example.kinopoiskapp.ui.movies.MoviesFragment"
+        android:name="com.example.kinopoiskapp.ui.movies.view.MoviesFragment"
         android:label="MoviesFragment" >
         <action
             android:id="@+id/action_moviesFragment_to_detailFragment"

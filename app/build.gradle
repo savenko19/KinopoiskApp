@@ -14,6 +14,7 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField "String", "BASE_URL", "\"https://s3-eu-west-1.amazonaws.com/sequeniatesttask/\""
     }
 
     buildFeatures {
@@ -62,5 +63,8 @@ dependencies {
     implementation "com.squareup.okhttp3:okhttp:$okHttp_version"
     //noinspection GradleDependency
     implementation "com.squareup.okhttp3:logging-interceptor:$okHttp_version"
+
+    //Koin
+    implementation "org.koin:koin-android:2.1.6"
 
 }
