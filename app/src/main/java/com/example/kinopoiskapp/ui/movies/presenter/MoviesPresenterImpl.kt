@@ -6,6 +6,7 @@ import com.example.kinopoiskapp.data.remote.OnLoadListener
 import com.example.kinopoiskapp.data.remote.model.MovieDTO
 import com.example.kinopoiskapp.data.remote.model.MoviesResponseDTO
 import com.example.kinopoiskapp.domain.RemoteRepository
+import com.example.kinopoiskapp.domain.model.Movie
 import com.example.kinopoiskapp.ui.movies.view.MoviesView
 
 class MoviesPresenterImpl(
@@ -14,14 +15,14 @@ class MoviesPresenterImpl(
 
     override fun viewIsReady() {
         fetchAllMovies()
+        view?.showGenres()
     }
 
     override fun fetchAllMovies() {
-        remoteRepository.fetchAllMovies(object : OnLoadListener<MoviesResponseDTO> {
-            override fun onLoadSuccess(response: MoviesResponseDTO) {
-                for (movie in response.movies) {
-                    Log.e("Test", movie.movieLocalizedName)
-                }
+        remoteRepository.fetchAllMovies(object : OnLoadListener<List<Movie>> {
+            override fun onLoadSuccess(response: List<Movie>) {
+
+                view?.showMovies(response)
             }
 
             override fun onLoadFailure(errorMsg: String) {

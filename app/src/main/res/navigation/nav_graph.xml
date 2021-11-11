@@ -3,7 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/moviesFragment">
-
     <fragment
         android:id="@+id/moviesFragment"
         android:name="com.example.kinopoiskapp.ui.movies.view.MoviesFragment"

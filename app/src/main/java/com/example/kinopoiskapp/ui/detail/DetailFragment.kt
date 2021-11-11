@@ -2,13 +2,10 @@ package com.example.kinopoiskapp.ui.detail
 
 import android.os.Bundle
 import android.view.View
-import com.example.kinopoiskapp.base.BaseFragment
+import androidx.fragment.app.Fragment
 import com.example.kinopoiskapp.base.BaseView
-import com.example.kinopoiskapp.databinding.FragmentDetailBinding
 
-class DetailFragment: BaseFragment<FragmentDetailBinding>(
-    FragmentDetailBinding::inflate
-), BaseView {
+class DetailFragment : Fragment(), BaseView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
