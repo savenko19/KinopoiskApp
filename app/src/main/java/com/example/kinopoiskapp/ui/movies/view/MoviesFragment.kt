@@ -1,19 +1,21 @@
 package com.example.kinopoiskapp.ui.movies.view
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.kinopoiskapp.R
-import com.example.kinopoiskapp.data.remote.model.MovieDTO
 import com.example.kinopoiskapp.databinding.FragmentMoviesBinding
-import com.example.kinopoiskapp.domain.model.Movie
 import com.example.kinopoiskapp.ui.movies.presenter.MoviesPresenter
-import com.example.kinopoiskapp.ui.movies.view.adapter.MoviesAdapter
 import org.koin.android.ext.android.inject
+import androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.kinopoiskapp.ui.movies.view.adapter.MovieRecyclerViewAdapter
+import com.example.kinopoiskapp.ui.movies.view.adapter.RecyclerViewItem
+
 
 class MoviesFragment : Fragment(), MoviesView {
 
@@ -22,7 +24,7 @@ class MoviesFragment : Fragment(), MoviesView {
     private var _binding: FragmentMoviesBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var moviesAdapter: MoviesAdapter
+    private val recyclerViewAdapter = MovieRecyclerViewAdapter()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,11 +49,32 @@ class MoviesFragment : Fragment(), MoviesView {
     }
 
 
-    override fun showMovies(movies: List<Movie>) {
-        moviesAdapter = MoviesAdapter({
-            findNavController().navigate(R.id.action_moviesFragment_to_detailFragment)
-        }, movies)
-        binding.moviesRecycler.adapter = moviesAdapter
+    override fun showMovies(movies: List<RecyclerViewItem>) {
+        val manager = GridLayoutManager(requireContext(), 2)
+        manager.spanSizeLookup = object : SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (recyclerViewAdapter.getItemViewType(position) == R.layout.movie_item_layout) 1 else 2
+            }
+        }
+
+        recyclerViewAdapter.items = movies
+        recyclerViewAdapter.itemClickListener = { recyclerViewItem ->
+            when (recyclerViewItem) {
+                is RecyclerViewItem.Movie -> {
+                    val action = MoviesFragmentDirections.actionMoviesFragmentToDetailFragment(
+                        recyclerViewItem.id
+                    )
+                    findNavController().navigate(action)
+                }
+                is RecyclerViewItem.Genre -> {
+
+                }
+            }
+        }
+        binding.moviesRecycler.apply {
+            adapter = recyclerViewAdapter
+            layoutManager = manager
+        }
     }
 
     override fun showGenres() {
