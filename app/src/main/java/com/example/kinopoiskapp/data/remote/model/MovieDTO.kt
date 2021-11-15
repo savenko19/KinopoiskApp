@@ -11,6 +11,8 @@ data class MovieDTO(
     val movieName: String,
     @SerializedName("year")
     val movieYear: Int,
+    @SerializedName("genres")
+    val genres: ArrayList<String>,
     @SerializedName("rating")
     val movieRating: Float,
     @SerializedName("image_url")

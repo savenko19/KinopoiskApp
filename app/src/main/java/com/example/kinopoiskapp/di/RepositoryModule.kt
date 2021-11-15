@@ -1,26 +1,17 @@
 package com.example.kinopoiskapp.di
 
-import com.example.kinopoiskapp.data.LocalRepositoryImpl
-import com.example.kinopoiskapp.data.RemoteRepositoryImpl
+import com.example.kinopoiskapp.data.RepositoryImpl
 import com.example.kinopoiskapp.data.local.MovieDao
 import com.example.kinopoiskapp.data.remote.RemoteDataSource
-import com.example.kinopoiskapp.domain.LocalRepository
-import com.example.kinopoiskapp.domain.RemoteRepository
+import com.example.kinopoiskapp.domain.Repository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single { provideRemoteRepository(remoteDataSource = get()) }
-    single { provideLocalRepository(movieDao = get()) }
-}
-
-private fun provideRemoteRepository(
-    remoteDataSource: RemoteDataSource
-): RemoteRepository {
-    return RemoteRepositoryImpl(remoteDataSource)
+    single { provideLocalRepository(movieDao = get(), remoteDataSource = get()) }
 }
 
 private fun provideLocalRepository(
-    movieDao: MovieDao
-): LocalRepository {
-    return LocalRepositoryImpl(movieDao)
+    movieDao: MovieDao, remoteDataSource: RemoteDataSource
+): Repository {
+    return RepositoryImpl(movieDao, remoteDataSource)
 }

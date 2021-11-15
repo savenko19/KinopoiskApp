@@ -2,10 +2,10 @@ package com.example.kinopoiskapp.data.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.example.kinopoiskapp.data.local.model.GenreEntity
+import androidx.room.TypeConverters
 import com.example.kinopoiskapp.data.local.model.MovieEntity
 
-@Database(entities = [MovieEntity::class, GenreEntity::class], version = 1)
+@Database(entities = [MovieEntity::class], version = 1, exportSchema = false)
 abstract class MoviesDatabase: RoomDatabase() {
-    abstract fun movieDao(): MovieDao
+    abstract val movieDao: MovieDao
 }

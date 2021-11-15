@@ -6,6 +6,7 @@ import com.example.kinopoiskapp.di.localModule
 import com.example.kinopoiskapp.di.remoteModule
 import com.example.kinopoiskapp.di.repositoryModule
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 
 class App : Application() {
@@ -14,7 +15,14 @@ class App : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@App)
-            modules(listOf(remoteModule, localModule, repositoryModule, appModule))
+            modules(
+                listOf(
+                    localModule,
+                    remoteModule,
+                    repositoryModule,
+                    appModule
+                )
+            )
         }
     }
 }

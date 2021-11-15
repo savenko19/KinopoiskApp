@@ -8,17 +8,18 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module
 
 val localModule = module {
+
+    fun provideDatabase(application: Application): MoviesDatabase {
+        return Room.databaseBuilder(application, MoviesDatabase::class.java, "MoviesDB")
+            .fallbackToDestructiveMigration()
+            .allowMainThreadQueries()
+            .build()
+    }
+
+    fun provideDao(database: MoviesDatabase): MovieDao =
+        database.movieDao
+
     single { provideDatabase(androidApplication()) }
     single { provideDao(database = get()) }
 }
 
-private fun provideDatabase(application: Application): MoviesDatabase =
-    Room.databaseBuilder(
-        application,
-        MoviesDatabase::class.java,
-        "movies")
-        .fallbackToDestructiveMigration()
-        .build()
-
-private fun provideDao(database: MoviesDatabase): MovieDao =
-    database.movieDao()
