@@ -1,6 +1,7 @@
 package com.example.kinopoiskapp.data
 
 import android.util.Log
+import androidx.room.util.StringUtil
 import com.example.kinopoiskapp.data.local.MovieDao
 import com.example.kinopoiskapp.data.local.model.MovieEntity
 import com.example.kinopoiskapp.data.remote.OnLoadListener
@@ -56,6 +57,25 @@ class RepositoryImpl(
 
     override fun getMovieById(id: Int) =
         movieDao.getMovieById(id).toUI()
+
+    override fun getMoviesByGenre(genre: String): List<Movie> {
+        return movieDao.getMoviesByGenre(genre).map {
+            it.toUI()
+        }
+    }
+
+    override fun getGenres(): List<String> {
+        val genres = HashSet<String>()
+        movieDao.getAllMovies().forEach { movie ->
+            movie.genres.forEach {
+                if (it.isNotEmpty()) {
+                    genres.add(it)
+                }
+            }
+        }
+
+        return ArrayList(genres)
+    }
 }
 
 private fun MovieEntity.toUI() = Movie(

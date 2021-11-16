@@ -13,6 +13,9 @@ interface MovieDao {
     @Query("SELECT * FROM movies WHERE id = :id")
     fun getMovieById(id: Int): MovieEntity
 
+    @Query("SELECT * FROM movies WHERE genres LIKE '%' || :genre || '%'")
+    fun getMoviesByGenre(genre: String): List<MovieEntity>
+
     @Insert
     fun insertAllMovies(movies: List<MovieEntity>)
 }

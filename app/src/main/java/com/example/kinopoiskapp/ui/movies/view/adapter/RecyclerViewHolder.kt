@@ -10,6 +10,7 @@ import com.example.kinopoiskapp.databinding.TitleItemLayoutBinding
 
 sealed class RecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(binding.root) {
 
+
     var itemClickListener: ((item: RecyclerViewItem) -> Unit)? = null
 
     class TitleViewHolder(private val binding: TitleItemLayoutBinding) :
@@ -19,10 +20,25 @@ sealed class RecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(
         }
     }
 
-    class GenreViewHolder(private val binding: GenreItemLayoutBinding) :
+    class GenreViewHolder(
+        private val binding: GenreItemLayoutBinding,
+        private val onSelect: (position: Int) -> Unit
+    ) :
         RecyclerViewHolder(binding) {
         fun bind(genre: RecyclerViewItem.Genre) {
             binding.genreTitle.text = genre.title
+            binding.root.setOnClickListener {
+                onSelect(adapterPosition)
+                itemClickListener?.invoke(genre)
+            }
+        }
+
+        fun selectedBg() {
+            binding.root.setBackgroundResource(R.drawable.selected_genre_background)
+        }
+
+        fun defaultBg() {
+            binding.root.setBackgroundResource(R.drawable.genre_background)
         }
     }
 
@@ -34,8 +50,7 @@ sealed class RecyclerViewHolder(binding: ViewBinding) : RecyclerView.ViewHolder(
                 Glide
                     .with(binding.root)
                     .load(movie.imageUrl)
-                    .centerCrop()
-                    .placeholder(R.drawable.ic_launcher_background)
+                    .placeholder(R.drawable.non_image)
                     .into(movieImageIv)
 
                 root.setOnClickListener {

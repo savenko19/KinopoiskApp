@@ -10,10 +10,11 @@
         android:id="@+id/movieImageIv"
         android:layout_width="150dp"
         android:layout_height="150dp"
+        android:scaleType="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription"
-        tools:src="@mipmap/ic_launcher" />
+        tools:src="@drawable/non_image" />
 
     <FrameLayout
         android:layout_width="0dp"

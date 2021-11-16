@@ -11,8 +11,7 @@ data class MovieEntity(
     val id: Int?,
     val name: String?,
     val imageUrl: String?,
-    @TypeConverters(GenresConverter::class)
-    val genres: ArrayList<String>,
+    val genres: List<String>,
     val description: String?,
     val rating: Float?,
     val year: Int

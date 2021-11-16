@@ -8,4 +8,8 @@ interface Repository {
     fun getAllMovies(onLoadListener: OnLoadListener<List<Movie>>)
 
     fun getMovieById(id: Int): Movie
+
+    fun getMoviesByGenre(genre: String): List<Movie>
+
+    fun getGenres(): List<String>
 }

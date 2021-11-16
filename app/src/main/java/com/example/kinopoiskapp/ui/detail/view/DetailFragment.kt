@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
+import com.example.kinopoiskapp.R
 import com.example.kinopoiskapp.databinding.FragmentDetailBinding
 import com.example.kinopoiskapp.databinding.FragmentMoviesBinding
 import com.example.kinopoiskapp.domain.model.Movie
@@ -49,9 +50,13 @@ class DetailFragment : Fragment(), DetailView {
         binding.apply {
             Glide.with(requireView())
                 .load(movie.movieImageUri)
+                .placeholder(R.drawable.non_image)
                 .into(movieImageIv)
 
             toolbar.title = movie.movieName
+            toolbar.setNavigationOnClickListener {
+                requireActivity().onBackPressed()
+            }
             movieNameTv.text = movie.movieName
             movieYearTv.append(movie.movieYear.toString())
             movieRatingTv.append(movie.movieRating.toString())

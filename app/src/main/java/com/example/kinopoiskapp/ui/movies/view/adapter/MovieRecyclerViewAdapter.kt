@@ -10,6 +10,9 @@ import com.example.kinopoiskapp.databinding.TitleItemLayoutBinding
 
 class MovieRecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewHolder>() {
 
+    var selectedItemPosition = -1
+    var lastItemSelectedPosition = -1
+
     var items = listOf<RecyclerViewItem>()
         set(value) {
             field = value
@@ -50,20 +53,35 @@ class MovieRecyclerViewAdapter : RecyclerView.Adapter<RecyclerViewHolder>() {
                     parent,
                     false
                 )
-            )
+            ) {
+                selectedItemPosition = it
+                lastItemSelectedPosition = if (lastItemSelectedPosition == -1) {
+                    selectedItemPosition
+                } else {
+                    notifyItemChanged(lastItemSelectedPosition)
+                    selectedItemPosition
+                }
+                notifyItemChanged(selectedItemPosition)
+            }
 
             else -> throw IllegalAccessException()
         }
     }
 
     override fun onBindViewHolder(holder: RecyclerViewHolder, position: Int) {
+        holder.itemClickListener = itemClickListener
         when (holder) {
             is RecyclerViewHolder.TitleViewHolder -> holder.bind(items[position] as RecyclerViewItem.Title)
-            is RecyclerViewHolder.MovieViewHolder -> {
-                holder.bind(items[position] as RecyclerViewItem.Movie)
-                holder.itemClickListener = itemClickListener
+            is RecyclerViewHolder.MovieViewHolder -> holder.bind(items[position] as RecyclerViewItem.Movie)
+            is RecyclerViewHolder.GenreViewHolder -> {
+                if (position == selectedItemPosition) {
+                    holder.selectedBg()
+                } else {
+                    holder.defaultBg()
+                }
+
+                holder.bind(items[position] as RecyclerViewItem.Genre)
             }
-            is RecyclerViewHolder.GenreViewHolder -> holder.bind(items[position] as RecyclerViewItem.Genre)
         }
     }
 

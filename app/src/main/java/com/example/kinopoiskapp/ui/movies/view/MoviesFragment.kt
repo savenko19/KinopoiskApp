@@ -1,6 +1,7 @@
 package com.example.kinopoiskapp.ui.movies.view
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -61,13 +62,15 @@ class MoviesFragment : Fragment(), MoviesView {
         recyclerViewAdapter.itemClickListener = { recyclerViewItem ->
             when (recyclerViewItem) {
                 is RecyclerViewItem.Movie -> {
+                    Log.e("Test", "Click ${recyclerViewItem.title}")
                     val action = MoviesFragmentDirections.actionMoviesFragmentToDetailFragment(
                         recyclerViewItem.id
                     )
                     findNavController().navigate(action)
                 }
                 is RecyclerViewItem.Genre -> {
-
+                    Log.e("Test", "Click ${recyclerViewItem.title}")
+                    presenter.getMoviesByGenre(recyclerViewItem.title)
                 }
             }
         }

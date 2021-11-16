@@ -12,37 +12,17 @@ class MoviesPresenterImpl(
     private val repository: Repository
 ) : BasePresenter<MoviesView>(), MoviesPresenter {
 
+    private lateinit var movies: List<Movie>
+
     override fun viewIsReady() {
         fetchAllMovies()
-        view?.showGenres()
     }
 
     override fun fetchAllMovies() {
         repository.getAllMovies(object : OnLoadListener<List<Movie>> {
             override fun onLoadSuccess(response: List<Movie>) {
-                val recyclerViewItems = mutableListOf<RecyclerViewItem>()
-                recyclerViewItems.add(RecyclerViewItem.Title("Жанры"))
-                recyclerViewItems.addAll(
-                    listOf(
-                        RecyclerViewItem.Genre(
-                            "QWE"
-                        ),
-                        RecyclerViewItem.Genre(
-                            "QWE"
-                        ),
-                        RecyclerViewItem.Genre(
-                            "QWE"
-                        ),
-                        RecyclerViewItem.Genre(
-                            "QWE"
-                        )
-                    )
-                )
-                recyclerViewItems.add(RecyclerViewItem.Title("Фильмы"))
-                recyclerViewItems.addAll(response.map {
-                    it.toRecyclerViewItem()
-                })
-                view?.showMovies(recyclerViewItems)
+                movies = response
+                showMovies(movies)
             }
 
             override fun onLoadFailure(errorMsg: String) {
@@ -50,7 +30,29 @@ class MoviesPresenterImpl(
             }
         })
     }
+
+    override fun getMoviesByGenre(genre: String) {
+        movies = repository.getMoviesByGenre(genre)
+        showMovies(movies)
+    }
+
+    private fun showMovies(movies: List<Movie>) {
+        val recyclerViewItems = mutableListOf<RecyclerViewItem>()
+        recyclerViewItems.add(RecyclerViewItem.Title("Жанры"))
+        recyclerViewItems.addAll(repository.getGenres().map {
+            it.toRecyclerViewItem()
+        })
+        recyclerViewItems.add(RecyclerViewItem.Title("Фильмы"))
+        recyclerViewItems.addAll(movies.map {
+            it.toRecyclerViewItem()
+        })
+        view?.showMovies(recyclerViewItems)
+    }
 }
+
+private fun String.toRecyclerViewItem() = RecyclerViewItem.Genre(
+    title = this
+)
 
 private fun Movie.toRecyclerViewItem() = RecyclerViewItem.Movie(
     this.id!!,

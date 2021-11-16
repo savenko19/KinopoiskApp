@@ -8,14 +8,12 @@ import java.util.stream.Collectors
 class GenresConverter {
     @RequiresApi(Build.VERSION_CODES.N)
     @TypeConverter
-    fun fromGenres(genres: ArrayList<String>): String {
+    fun fromGenres(genres: List<String>): String {
         return genres.stream().collect(Collectors.joining(","))
     }
 
     @TypeConverter
-    fun toGenres(data: String): ArrayList<String> {
-        val array = arrayListOf<String>()
-        array.addAll(data.split(","))
-        return array
+    fun toGenres(data: String): List<String> {
+        return data.split(",")
     }
 }
